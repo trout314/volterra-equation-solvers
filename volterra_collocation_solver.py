@@ -225,20 +225,34 @@ def poly_piece_VIDE(mesh_indx, solution_Y, coll_info, init_value, dt):
 def solve_VIDE(*, g_values, kernel_values, a_values, soln_init_value, time_step,
                coll_divs=2, coll_choices=[0,1,2], return_polys=False):
     '''
-    Solves the following Volterra integro-differential equation (VIDE) for the
-    unknown function y(t). 
+    Solve a Volterra integro-differential equation (VIDE.)
+      
+    Solve the following Volterra integro-differential equation for the unknown
+    function y(t).
 
-    y'(t) = a(t)*y(t) + g(t) + integral[K(t-s)y(s)ds from s=0 to s=t]
+        y'(t) = a(t)y(t) + g(t) + integral[K(t-s)y(s)ds from s=0 to s=t]
+    
+    Returns a two element tuple (soln_values, polys) where soln_values is a
+    numpy array of solution values and polys is a 
+    
+    (of the same length as g_values, kernel_values, and a_values)
+    containing the y-values of the solution, and polys is a list of polynomial
+    functions [f_1, f_2, ..., f_N] one for each mesh interval.
 
-    Returns a two element tuple (soln_values, polys) where
-    soln_values is a list of y-values and polys is a list of the polynomial
+    Keyword Arguments:
+        g_values (numpy array): An array of 
+        kernel_values (numpy array): Another decimal integer
 
-            Parameters:
-                    a (int): A decimal integer
-                    b (int): Another decimal integer
+    
+    The solver uses the collocation method described in the book:
+        Brunner H. "Collocation Methods for Volterra Integral and Related
+        Functional Differential Equations." Cambridge University Press; 2004.
+    See Chapter 3 pages 160-167 for details.
 
-            Returns:
-                    binary_sum (str): Binary string of the sum of a and b
+    
+    
+    Returns:
+        binary_sum (str): Binary string of the sum of a and b
     '''
     assert g_values.shape == kernel_values.shape
     assert a_values.shape == kernel_values.shape
